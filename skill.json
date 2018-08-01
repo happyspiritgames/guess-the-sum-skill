@@ -1,0 +1,29 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Guess the Sum Game",
+          "examplePhrases": [
+            "Alexa play guess the sum",
+            "Alexa open guess the sum"
+          ],
+          "name": "guess-the-sum-game",
+          "description": "Simple game of guessing the sum of secret numbers."
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "GAMES",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "sourceDir": "lambda/custom"
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

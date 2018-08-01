@@ -1,0 +1,40 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.88e64077-5f13-487c-969d-2ae1f57ad115",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-guess-the-sum-game-default"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+          "eTag": "67fadce4169a22b271d472115ec3d18c"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "2628c1c273becaa7f458017f199dc754"
+          }
+        },
+        "lambda": [
+          {
+            "arn": "arn:aws:lambda:us-east-1:894318566477:function:ask-custom-guess-the-sum-game-default",
+            "functionName": "ask-custom-guess-the-sum-game-default",
+            "awsRegion": "us-east-1",
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "revisionId": "9e994e62-71fd-4db4-b2fd-c08f0e313e00"
+          }
+        ]
+      }
+    }
+  }
+}
