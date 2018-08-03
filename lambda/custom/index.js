@@ -18,18 +18,37 @@ const LaunchRequestHandler = {
   },
 };
 
+const announceWinner = (handlerInput) => {
+  const speechText = 'And we have a winner. I think. Now, where did I put my calculator?'
+  return handlerInput.responseBuilder
+    .speak(speechText)
+    .withSimpleCard('Guess the Sum', speechText)
+    .getResponse();
+}
+
+const verifySlots = (handlerInput) => {
+  const { intent } = handlerInput.requestEnvelope.request;
+
+  // TODO use response interceptor to validate slot values
+
+  return handlerInput.responseBuilder
+    .addDelegateDirective(intent)
+    .getResponse();
+}
+
 const PlayGameIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'PlayGameIntent';
   },
   handle(handlerInput) {
-    const speechText = 'Guess the Sum!';
+    const { dialogState, intent } = handlerInput.requestEnvelope.request;
 
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('Guess the Sum', speechText)
-      .getResponse();
+    if (dialogState === 'COMPLETED') {
+      return announceWinner(handlerInput)
+    } else {
+      return verifySlots(handlerInput)
+    }
   },
 };
 

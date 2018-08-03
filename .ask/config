@@ -26,12 +26,12 @@
         "lambda": [
           {
             "arn": "arn:aws:lambda:us-east-1:894318566477:function:ask-custom-guess-the-sum-game-default",
-            "functionName": "ask-custom-guess-the-sum-game-default",
+            "functionName": "arn:aws:lambda:us-east-1:894318566477:function:ask-custom-guess-the-sum-game-default",
             "awsRegion": "us-east-1",
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "9e994e62-71fd-4db4-b2fd-c08f0e313e00"
+            "revisionId": "1433f78d-54b6-4941-8921-33ab3c6f7519"
           }
         ]
       }
