@@ -91,13 +91,27 @@ const announceWinner = (handlerInput) => {
 
 const verifySlots = (handlerInput) => {
   const { intent } = handlerInput.requestEnvelope.request;
-  const { playerSecretNumber, playerGuess } = extractSlotValues(intent);
+  const playerSecretNumber = intent.slots.playerSecretNumber.value
+  const playerGuess = intent.slots.playerGuess.value;
   const validRangeSpeech = 'Pick a number from zero to ten. ';
   let outOfRangeSpeech;
 
-  if (playerSecretNumber && !Number.isNaN(playerSecretNumber)) {
-    if (playerSecretNumber < 0 || playerSecretNumber > 10) {
-      outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
+  console.log('slots', intent.slots);
+
+  // TODO get it to see when NaN
+ 
+  if (playerSecretNumber) {
+    if (!Number.isNaN(playerSecretNumber)) {
+      if (playerSecretNumber < 0 || playerSecretNumber > 10) {
+        outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
+        return handlerInput.responseBuilder
+          .speak(outOfRangeSpeech)
+          .reprompt(validRangeSpeech)
+          .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
+          .getResponse();
+      }
+    } else {
+      outOfRangeSpeech = 'That is not a number. Try again. ';
       return handlerInput.responseBuilder
         .speak(outOfRangeSpeech)
         .reprompt(validRangeSpeech)
