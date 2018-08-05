@@ -31,12 +31,19 @@ const pickRandomFromRange = (from = 0, to = 10) => {
   return Math.floor(Math.random() * (to - from + 1)) + from;
 };
 
+const extractSlotValues = (intent) => {
+  const playerSecretNumber = parseInt(intent.slots.playerSecretNumber.value);
+  const playerGuess = parseInt(intent.slots.playerGuess.value);
+  return {
+    playerSecretNumber,
+    playerGuess
+  }
+};
+
 const announceWinner = (handlerInput) => {
   let speechText;
-  const { slots } = handlerInput.requestEnvelope.request.intent;
+  const { playerSecretNumber, playerGuess } = extractSlotValues(handlerInput.requestEnvelope.request.intent);
 
-  const playerSecretNumber = parseInt(slots.playerSecretNumber.value);
-  const playerGuess = parseInt(slots.playerGuess.value);
   if (Number.isNaN(playerSecretNumber) || Number.isNaN(playerGuess)) {
     speechText = 'One of the answers you gave me is not a number. You forfeit.';
     return handlerInput.responseBuilder
@@ -45,9 +52,6 @@ const announceWinner = (handlerInput) => {
       .withSimpleCard('Guess the Sum', speechText)
       .getResponse();
   }
-
-  // TODO re-ask when given numbers are out of bounds
-
 
   // skill takes turn
   const skillSecretNumber = pickRandomFromRange();
@@ -87,6 +91,61 @@ const announceWinner = (handlerInput) => {
 
 const verifySlots = (handlerInput) => {
   const { intent } = handlerInput.requestEnvelope.request;
+  const { playerSecretNumber, playerGuess } = extractSlotValues(intent);
+  const validRangeSpeech = 'Pick a number from zero to ten. ';
+  let outOfRangeSpeech;
+
+  if (playerSecretNumber && !Number.isNaN(playerSecretNumber)) {
+    if (playerSecretNumber < 0 || playerSecretNumber > 10) {
+      outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
+      return handlerInput.responseBuilder
+        .speak(outOfRangeSpeech)
+        .reprompt(validRangeSpeech)
+        .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
+        .getResponse();
+    }
+  }
+
+  if (playerGuess && !Number.isNaN(playerGuess)) {
+    if (playerGuess < 0 || playerGuess > 20) {
+      outOfRangeSpeech = 'Your guess should be a number from zero to twenty. Try again. ';
+      return handlerInput.responseBuilder
+        .speak(outOfRangeSpeech)
+        .reprompt(validRangeSpeech)
+        .addElicitSlotDirective(intent.slots.playerGuess.name)
+        .getResponse();
+    }
+  }
+
+  // if (playerSecretNumber) {
+  //   if (Number.isNaN(playerSecretNumber)) {
+  //     outOfRangeSpeech = 'That is not a number. Try again. ';
+  //     return handlerInput.responseBuilder
+  //       .speak(outOfRangeSpeech)
+  //       .reprompt(validRangeSpeech)
+  //       .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
+  //       .getResponse();
+  //   } else if (playerSecretNumber < 0 || playerSecretNumber > 10) {
+  //     outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
+  //     return handlerInput.responseBuilder
+  //       .speak(outOfRangeSpeech)
+  //       .reprompt(validRangeSpeech)
+  //       .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
+  //       .getResponse();
+  //   }
+  // }
+
+  // if (playerGuess && !Number.isNaN(playerGuess)) {
+  //   if (playerGuess < 0 || playerGuess > 20) {
+  //     outOfRangeSpeech = 'Your guess should be from zero to twenty. Try again. ';
+  //     return handlerInput.responseBuilder
+  //       .speak(outOfRangeSpeech)
+  //       .reprompt()
+  //       .addElicitSlotDirective(intent.slots.playerGuess.name)
+  //       .getResponse();
+  //   }
+  // }
+
   return handlerInput.responseBuilder
     .addDelegateDirective(intent)
     .getResponse();
