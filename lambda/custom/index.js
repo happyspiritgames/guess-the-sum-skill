@@ -2,12 +2,12 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk-core');
-
 const getDirectionsSpeech = 'To play this game, you and I will think of secret numbers. '
     + 'Then we will take turns guessing the sum of our secret numbers. '
     + 'Whoever is closest wins. ';
 
-const playGameSpeech = 'When you are ready, say play the game.';
+const playGameIntroSpeech = 'To play guess the total, say play the game.';
+const playRepromptSpeech = 'If you need directions, say directions.';
 
 const playAgainSpeech = 'To play again, say play again.';
 
@@ -16,12 +16,11 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Guess the sum. ' + playGameSpeech;
 
     return handlerInput.responseBuilder
-      .speak(speechText)
-      .reprompt(playGameSpeech)
-      .withSimpleCard('Guess the Sum', speechText)
+      .speak(playGameIntroSpeech)
+      .reprompt(playRepromptSpeech)
+      .withSimpleCard('Guess the Sum', playGameIntroSpeech)
       .getResponse();
   },
 };
@@ -32,12 +31,12 @@ const pickRandomFromRange = (from = 0, to = 10) => {
 };
 
 const extractSlotValues = (intent) => {
-  const playerSecretNumber = parseInt(intent.slots.playerSecretNumber.value);
-  const playerGuess = parseInt(intent.slots.playerGuess.value);
+  const playerSecretNumber = parseInt(intent.slots.playerSecretNumber.value, 10);
+  const playerGuess = parseInt(intent.slots.playerGuess.value, 10);
   return {
     playerSecretNumber,
     playerGuess
-  }
+  };
 };
 
 const announceWinner = (handlerInput) => {
@@ -65,7 +64,7 @@ const announceWinner = (handlerInput) => {
   const skillDelta = Math.abs(skillGuess - sum);
 
   speechText = `My guess is ${skillGuess}. `;
-  speechText += 'Now I will calculate the sum. '
+  speechText += 'Now I will calculate the sum. ';
   speechText += `My secret number is ${skillSecretNumber}, so the sum is ${sum}. `;
 
   if (playerDelta < skillDelta) {
@@ -100,9 +99,11 @@ const verifySlots = (handlerInput) => {
   let validationError = false;
   let validationProblemSpeech;
 
+  console.log(intent.slots);
+
   if (playerSecretNumber.value) {
     validationError = false;
-    slotValue = parseInt(playerSecretNumber.value)
+    slotValue = parseInt(playerSecretNumber.value, 10);
     if (Number.isNaN(slotValue)) {
       validationProblemSpeech = notNumericSpeech;
       validationError = true;
@@ -121,7 +122,7 @@ const verifySlots = (handlerInput) => {
 
   if (playerGuess.value) {
     validationError = false;
-    slotValue = parseInt(playerGuess.value)
+    slotValue = parseInt(playerGuess.value, 10);
     if (Number.isNaN(slotValue)) {
       validationProblemSpeech = notNumericSpeech;
       validationError = true;
@@ -167,7 +168,7 @@ const GetDirectionsIntentHandler = {
   handle(handlerInput) {
     return handlerInput.responseBuilder
       .speak(getDirectionsSpeech)
-      .reprompt(playGameSpeech)
+      .reprompt(playGameIntroSpeech)
       .withSimpleCard('Guess the Sum', getDirectionsSpeech)
       .getResponse();
   },
