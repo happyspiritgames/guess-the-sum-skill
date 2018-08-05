@@ -1,127 +1,136 @@
 {
-  "interactionModel": {
-      "languageModel": {
-          "invocationName": "guess the sum",
-          "intents": [
-              {
-                  "name": "AMAZON.CancelIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.HelpIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.StopIntent",
-                  "samples": []
-              },
-              {
-                  "name": "PlayGameIntent",
-                  "slots": [
-                      {
-                          "name": "playerSecretNumber",
-                          "type": "AMAZON.NUMBER",
-                          "samples": [
-                              "I will say {playerSecretNumber}",
-                              "How about {playerSecretNumber}",
-                              "My secret number is {playerSecretNumber}",
-                              "My number is {playerSecretNumber}",
-                              "{playerSecretNumber}"
-                          ]
-                      },
-                      {
-                          "name": "playerGuess",
-                          "type": "AMAZON.NUMBER",
-                          "samples": [
-                              "Try {playerGuess}",
-                              "How about {playerGuess}",
-                              "My guess is {playerGuess}",
-                              "I will guess {playerGuess}",
-                              "{playerGuess}"
-                          ]
-                      }
-                  ],
-                  "samples": [
-                      "play the game",
-                      "start the game",
-                      "let's play"
-                  ]
-              }
-          ],
-          "types": []
-      },
-      "dialog": {
-          "intents": [
-              {
-                  "name": "PlayGameIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "playerSecretNumber",
-                          "type": "AMAZON.NUMBER",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.1306854259491.89971024109"
-                          }
-                      },
-                      {
-                          "name": "playerGuess",
-                          "type": "AMAZON.NUMBER",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.1306854259491.1301018809836"
-                          }
-                      }
-                  ]
-              }
-          ]
-      },
-      "prompts": [
-          {
-              "id": "Elicit.Slot.1306854259491.89971024109",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "How about a secret number?"
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "Your secret number, please."
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "Tell me your secret number."
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "What is your secret number?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.1306854259491.1301018809836",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "Now try to guess the sum."
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "What do you think the sum will be?"
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "Tell me your guess."
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "What is your guess?"
-                  }
-              ]
-          }
-      ]
-  }
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "guess the sum",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "PlayGameIntent",
+                    "slots": [
+                        {
+                            "name": "playerSecretNumber",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "I will say {playerSecretNumber}",
+                                "How about {playerSecretNumber}",
+                                "My secret number is {playerSecretNumber}",
+                                "My number is {playerSecretNumber}",
+                                "{playerSecretNumber}"
+                            ]
+                        },
+                        {
+                            "name": "playerGuess",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "Try {playerGuess}",
+                                "How about {playerGuess}",
+                                "My guess is {playerGuess}",
+                                "I will guess {playerGuess}",
+                                "{playerGuess}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "play again",
+                        "play the game",
+                        "start the game",
+                        "let's play"
+                    ]
+                },
+                {
+                    "name": "GetDirections",
+                    "slots": [],
+                    "samples": [
+                        "Tell me the rules",
+                        "What are the rules"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "PlayGameIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "playerSecretNumber",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1306854259491.89971024109"
+                            }
+                        },
+                        {
+                            "name": "playerGuess",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1306854259491.1301018809836"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1306854259491.89971024109",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How about a secret number?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Your secret number, please."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Tell me your secret number."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your secret number?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1306854259491.1301018809836",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Now try to guess the sum."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What do you think the sum will be?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Tell me your guess."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your guess?"
+                    }
+                ]
+            }
+        ]
+    }
 }

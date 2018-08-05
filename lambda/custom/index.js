@@ -3,16 +3,24 @@
 
 const Alexa = require('ask-sdk-core');
 
+const getDirectionsSpeech = 'To play this game, you and I will think of secret numbers. '
+    + 'Then we will take turns guessing the sum of our secret numbers. '
+    + 'Whoever is closest wins. ';
+
+const playGameSpeech = 'When you are ready, say play the game.';
+
+const playAgainSpeech = 'To play again, say play again.';
+
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Guess the sum. When you are ready, say play the game.';
+    const speechText = 'Guess the sum. ' + playGameSpeech;
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .reprompt(speechText)
+      .reprompt(playGameSpeech)
       .withSimpleCard('Guess the Sum', speechText)
       .getResponse();
   },
@@ -33,6 +41,7 @@ const announceWinner = (handlerInput) => {
     speechText = 'One of the answers you gave me is not a number. You forfeit.';
     return handlerInput.responseBuilder
       .speak(speechText)
+      .reprompt(playAgainSpeech)
       .withSimpleCard('Guess the Sum', speechText)
       .getResponse();
   }
@@ -71,6 +80,7 @@ const announceWinner = (handlerInput) => {
 
   return handlerInput.responseBuilder
     .speak(speechText)
+    .reprompt(playAgainSpeech)
     .withSimpleCard('Guess the Sum', speechText)
     .getResponse();
 };
@@ -95,6 +105,20 @@ const PlayGameIntentHandler = {
     } else {
       return verifySlots(handlerInput);
     }
+  },
+};
+
+const GetDirectionsIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetDirections';
+  },
+  handle(handlerInput) {
+    return handlerInput.responseBuilder
+      .speak(getDirectionsSpeech)
+      .reprompt(playGameSpeech)
+      .withSimpleCard('Guess the Sum', getDirectionsSpeech)
+      .getResponse();
   },
 };
 
@@ -161,6 +185,7 @@ exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
     PlayGameIntentHandler,
+    GetDirectionsIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
