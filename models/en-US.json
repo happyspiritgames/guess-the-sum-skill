@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "guess the sum",
+            "invocationName": "guess the total",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -52,6 +52,10 @@
                     "name": "GetDirections",
                     "slots": [],
                     "samples": [
+                        "give me the directions",
+                        "how to play",
+                        "rules",
+                        "directions",
                         "Tell me the rules",
                         "What are the rules"
                     ]

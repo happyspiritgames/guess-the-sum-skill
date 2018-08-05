@@ -102,7 +102,7 @@ const verifySlots = (handlerInput) => {
 
   if (playerSecretNumber.value) {
     validationError = false;
-    slotValue = intValue(playerSecretNumber.value)
+    slotValue = parseInt(playerSecretNumber.value)
     if (Number.isNaN(slotValue)) {
       validationProblemSpeech = notNumericSpeech;
       validationError = true;
@@ -121,7 +121,7 @@ const verifySlots = (handlerInput) => {
 
   if (playerGuess.value) {
     validationError = false;
-    slotValue = intValue(playerGuess.value)
+    slotValue = parseInt(playerGuess.value)
     if (Number.isNaN(slotValue)) {
       validationProblemSpeech = notNumericSpeech;
       validationError = true;
