@@ -90,75 +90,53 @@ const announceWinner = (handlerInput) => {
 };
 
 const verifySlots = (handlerInput) => {
-  const { intent } = handlerInput.requestEnvelope.request;
-  const playerSecretNumber = intent.slots.playerSecretNumber.value
-  const playerGuess = intent.slots.playerGuess.value;
   const validRangeSpeech = 'Pick a number from zero to ten. ';
-  let outOfRangeSpeech;
+  const notNumericSpeech = 'That is not a number. Try again. ';
+  const outOfSecretRange = 'Your secret number has to be from zero to ten. Try again. ';
+  const outOfGuessRange = 'Your guess should be a number from zero to twenty. Try again. ';
+  const { intent } = handlerInput.requestEnvelope.request;
+  const { playerSecretNumber, playerGuess } = intent.slots;
+  let slotValue;
+  let validationError = false;
+  let validationProblemSpeech;
 
-  console.log('slots', intent.slots);
-
-  // TODO get it to see when NaN
- 
-  if (playerSecretNumber) {
-    if (!Number.isNaN(playerSecretNumber)) {
-      if (playerSecretNumber < 0 || playerSecretNumber > 10) {
-        outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
-        return handlerInput.responseBuilder
-          .speak(outOfRangeSpeech)
-          .reprompt(validRangeSpeech)
-          .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
-          .getResponse();
-      }
-    } else {
-      outOfRangeSpeech = 'That is not a number. Try again. ';
+  if (playerSecretNumber.value) {
+    validationError = false;
+    slotValue = intValue(playerSecretNumber.value)
+    if (Number.isNaN(slotValue)) {
+      validationProblemSpeech = notNumericSpeech;
+      validationError = true;
+    } else if (slotValue < 0 || slotValue > 10) {
+      validationProblemSpeech = outOfSecretRange;
+      validationError = true;
+    }
+    if (validationError) {
       return handlerInput.responseBuilder
-        .speak(outOfRangeSpeech)
+        .speak(validationProblemSpeech)
         .reprompt(validRangeSpeech)
         .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
         .getResponse();
     }
   }
 
-  if (playerGuess && !Number.isNaN(playerGuess)) {
-    if (playerGuess < 0 || playerGuess > 20) {
-      outOfRangeSpeech = 'Your guess should be a number from zero to twenty. Try again. ';
+  if (playerGuess.value) {
+    validationError = false;
+    slotValue = intValue(playerGuess.value)
+    if (Number.isNaN(slotValue)) {
+      validationProblemSpeech = notNumericSpeech;
+      validationError = true;
+    } else if (slotValue < 0 || slotValue > 20) {
+      validationProblemSpeech = outOfGuessRange;
+      validationError = true;
+    }
+    if (validationError) {
       return handlerInput.responseBuilder
-        .speak(outOfRangeSpeech)
+        .speak(validationProblemSpeech)
         .reprompt(validRangeSpeech)
-        .addElicitSlotDirective(intent.slots.playerGuess.name)
+        .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
         .getResponse();
     }
   }
-
-  // if (playerSecretNumber) {
-  //   if (Number.isNaN(playerSecretNumber)) {
-  //     outOfRangeSpeech = 'That is not a number. Try again. ';
-  //     return handlerInput.responseBuilder
-  //       .speak(outOfRangeSpeech)
-  //       .reprompt(validRangeSpeech)
-  //       .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
-  //       .getResponse();
-  //   } else if (playerSecretNumber < 0 || playerSecretNumber > 10) {
-  //     outOfRangeSpeech = 'Your secret number has to be from zero to ten. Try again. ';
-  //     return handlerInput.responseBuilder
-  //       .speak(outOfRangeSpeech)
-  //       .reprompt(validRangeSpeech)
-  //       .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
-  //       .getResponse();
-  //   }
-  // }
-
-  // if (playerGuess && !Number.isNaN(playerGuess)) {
-  //   if (playerGuess < 0 || playerGuess > 20) {
-  //     outOfRangeSpeech = 'Your guess should be from zero to twenty. Try again. ';
-  //     return handlerInput.responseBuilder
-  //       .speak(outOfRangeSpeech)
-  //       .reprompt()
-  //       .addElicitSlotDirective(intent.slots.playerGuess.name)
-  //       .getResponse();
-  //   }
-  // }
 
   return handlerInput.responseBuilder
     .addDelegateDirective(intent)
