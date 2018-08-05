@@ -2,12 +2,12 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk-core');
-const getDirectionsSpeech = 'To play this game, you and I will think of secret numbers. '
+const directionsSpeech = 'To play this game, we will both think of secret numbers from zero to ten. '
     + 'Then we will take turns guessing the sum of our secret numbers. '
     + 'Whoever is closest wins. ';
 
 const playGameIntroSpeech = 'To play guess the total, say play the game.';
-const playRepromptSpeech = 'If you need directions, say directions.';
+const getDirectionsSpeech = 'If you need directions, say directions.';
 
 const playAgainSpeech = 'To play again, say play again.';
 
@@ -19,7 +19,7 @@ const LaunchRequestHandler = {
 
     return handlerInput.responseBuilder
       .speak(playGameIntroSpeech)
-      .reprompt(playRepromptSpeech)
+      .reprompt(getDirectionsSpeech)
       .withSimpleCard('Guess the Sum', playGameIntroSpeech)
       .getResponse();
   },
@@ -134,7 +134,7 @@ const verifySlots = (handlerInput) => {
       return handlerInput.responseBuilder
         .speak(validationProblemSpeech)
         .reprompt(validRangeSpeech)
-        .addElicitSlotDirective(intent.slots.playerSecretNumber.name)
+        .addElicitSlotDirective(intent.slots.playerGuess.name)
         .getResponse();
     }
   }
@@ -167,9 +167,9 @@ const GetDirectionsIntentHandler = {
   },
   handle(handlerInput) {
     return handlerInput.responseBuilder
-      .speak(getDirectionsSpeech)
+      .speak(directionsSpeech)
       .reprompt(playGameIntroSpeech)
-      .withSimpleCard('Guess the Sum', getDirectionsSpeech)
+      .withSimpleCard('Guess the Sum', directionsSpeech)
       .getResponse();
   },
 };
@@ -180,7 +180,7 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can say hello to me!';
+    const speechText = getDirectionsSpeech;
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -197,7 +197,7 @@ const CancelAndStopIntentHandler = {
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
-    const speechText = 'Goodbye!';
+    const speechText = 'Thanks for playing with me. Goodbye!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
