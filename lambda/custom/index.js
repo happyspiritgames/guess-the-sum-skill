@@ -3,8 +3,8 @@
 
 const Alexa = require('ask-sdk-core');
 
-const playGameIntroSpeech = 'To play guess the total, say play the game.';
-const getDirectionsSpeech = 'If you need directions, say directions.';
+const playGameIntroSpeech = 'To play guess the total, say play the game. ';
+const getDirectionsSpeech = 'If you need directions, say directions. ';
 
 const directionsSpeech = 'To play this game, we will both think of secret numbers from zero to ten. '
     + 'Then we will take turns guessing the total of our secret numbers. '
