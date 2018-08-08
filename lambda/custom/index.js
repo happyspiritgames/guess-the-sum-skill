@@ -2,25 +2,25 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk-core');
-const directionsSpeech = 'To play this game, we will both think of secret numbers from zero to ten. '
-    + 'Then we will take turns guessing the sum of our secret numbers. '
-    + 'Whoever is closest wins. ';
 
 const playGameIntroSpeech = 'To play guess the total, say play the game.';
 const getDirectionsSpeech = 'If you need directions, say directions.';
 
-const playAgainSpeech = 'To play again, say play again.';
+const directionsSpeech = 'To play this game, we will both think of secret numbers from zero to ten. '
+    + 'Then we will take turns guessing the total of our secret numbers. '
+    + 'Whoever is closest wins. ' + playGameIntroSpeech;
+
+const playAgainSpeech = 'You can say play again or quit.';
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-
     return handlerInput.responseBuilder
       .speak(playGameIntroSpeech)
       .reprompt(getDirectionsSpeech)
-      .withSimpleCard('Guess the Sum', playGameIntroSpeech)
+      .withSimpleCard('Guess the Total', playGameIntroSpeech)
       .getResponse();
   },
 };
@@ -43,48 +43,39 @@ const announceWinner = (handlerInput) => {
   let speechText;
   const { playerSecretNumber, playerGuess } = extractSlotValues(handlerInput.requestEnvelope.request.intent);
 
-  if (Number.isNaN(playerSecretNumber) || Number.isNaN(playerGuess)) {
-    speechText = 'One of the answers you gave me is not a number. You forfeit.';
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .reprompt(playAgainSpeech)
-      .withSimpleCard('Guess the Sum', speechText)
-      .getResponse();
-  }
-
-  // skill takes turn
   const skillSecretNumber = pickRandomFromRange();
   let skillGuess;
   do {
     skillGuess = pickRandomFromRange(skillSecretNumber, 20);
   } while (skillGuess === playerGuess);
 
-  const sum = playerSecretNumber + skillSecretNumber;
-  const playerDelta = Math.abs(playerGuess - sum);
-  const skillDelta = Math.abs(skillGuess - sum);
+  const total = playerSecretNumber + skillSecretNumber;
+  const playerDelta = Math.abs(playerGuess - total);
+  const skillDelta = Math.abs(skillGuess - total);
 
   speechText = `My guess is ${skillGuess}. `;
-  speechText += 'Now I will calculate the sum. ';
-  speechText += `My secret number is ${skillSecretNumber}, so the sum is ${sum}. `;
+  speechText += 'Now I will calculate the total. ';
+  speechText += `My secret number is ${skillSecretNumber}, so the total is ${total}. `;
 
   if (playerDelta < skillDelta) {
-    speechText += 'Your guess is closer to the sum, so you win. That is worth two points. ';
+    speechText += 'Your guess is closer to the total, so you win. That is worth two points. ';
     if (playerDelta === 0) {
-      speechText += 'Also, you guessed the sum exactly, so you get an extra point. Well done. ';
+      speechText += 'Also, you guessed the total exactly, so you get an extra point. Well done. ';
     }
   } else if (playerDelta > skillDelta) {
-    speechText += 'My guess is closer to the sum, so I win. ';
+    speechText += 'My guess is closer to the total, so I win. ';
     if (skillDelta === 0) {
-      speechText += 'Also, I guessed the sum exactly. Aren\'t you impressed? ';
+      speechText += 'Also, I guessed the total exactly. Aren\'t you impressed? ';
     }
   } else {
-    speechText += 'We tied. Our guesses are the same distance from the sum. We each get a point. ';
+    speechText += 'We tied. Our guesses are the same distance from the total. We each get a point. ';
   }
+  speechText += 'Would you like to play again or quit? ';
 
   return handlerInput.responseBuilder
     .speak(speechText)
     .reprompt(playAgainSpeech)
-    .withSimpleCard('Guess the Sum', speechText)
+    .withSimpleCard('Guess the Total', speechText)
     .getResponse();
 };
 
@@ -163,13 +154,13 @@ const PlayGameIntentHandler = {
 const GetDirectionsIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetDirections';
+      && handlerInput.requestEnvelope.request.intent.name === 'GetDirectionsIntent';
   },
   handle(handlerInput) {
     return handlerInput.responseBuilder
       .speak(directionsSpeech)
       .reprompt(playGameIntroSpeech)
-      .withSimpleCard('Guess the Sum', directionsSpeech)
+      .withSimpleCard('Guess the Total', directionsSpeech)
       .getResponse();
   },
 };
@@ -180,12 +171,11 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = getDirectionsSpeech;
-
+    const speechText = playGameIntroSpeech + getDirectionsSpeech;
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Guess the Sum', speechText)
+      .withSimpleCard('Guess the Total', speechText)
       .getResponse();
   },
 };
@@ -198,10 +188,9 @@ const CancelAndStopIntentHandler = {
   },
   handle(handlerInput) {
     const speechText = 'Thanks for playing with me. Goodbye!';
-
     return handlerInput.responseBuilder
       .speak(speechText)
-      .withSimpleCard('Guess the Sum', speechText)
+      .withSimpleCard('Guess the Total', speechText)
       .getResponse();
   },
 };
@@ -212,7 +201,6 @@ const SessionEndedRequestHandler = {
   },
   handle(handlerInput) {
     console.log(`Session ended with reason: ${handlerInput.requestEnvelope.request.reason}`);
-
     return handlerInput.responseBuilder.getResponse();
   },
 };

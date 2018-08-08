@@ -42,6 +42,7 @@
                         }
                     ],
                     "samples": [
+                        "play",
                         "play again",
                         "play the game",
                         "start the game",
@@ -49,7 +50,7 @@
                     ]
                 },
                 {
-                    "name": "GetDirections",
+                    "name": "GetDirectionsIntent",
                     "slots": [],
                     "samples": [
                         "give me the directions",
